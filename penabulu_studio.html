@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Penabulu — Website Colour Direction</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --page-bg:#0A1712; --panel:#122820; --panel-2:#15302670;
+    --ink:#F2EFE6; --muted:#93A29A; --line:rgba(242,239,230,0.13);
+    --live:#4FD1C5;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--page-bg);color:var(--ink);font-family:'Inter',sans-serif;line-height:1.55;}
+  .page{max-width:1100px;margin:0 auto;padding:52px 24px 90px;}
+  .eyebrow{font-family:'Space Mono',monospace;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:16px;}
+  h1{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(30px,4.4vw,46px);line-height:1.08;margin:0 0 16px;letter-spacing:-0.01em;max-width:760px;}
+  .lede{font-size:16px;max-width:600px;color:#cfd6d0;}
+  .lede strong{color:var(--ink);}
+
+  .section-label{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0 0 16px;}
+
+  /* PICKER GRID */
+  .picker{margin-top:56px;}
+  .palette-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+  @media (max-width:820px){.palette-grid{grid-template-columns:repeat(2,1fr);}}
+  @media (max-width:480px){.palette-grid{grid-template-columns:1fr;}}
+  .p-card{
+    background:var(--panel); border:1px solid var(--line); border-radius:8px;
+    padding:14px; cursor:pointer; transition:border-color .2s, transform .15s;
+    text-align:left;
+  }
+  .p-card:hover{transform:translateY(-2px);}
+  .p-card.active{border-color:var(--live); box-shadow:0 0 0 1px var(--live);}
+  .swatch-strip{display:flex; height:34px; border-radius:5px; overflow:hidden; margin-bottom:11px;}
+  .swatch-strip span{display:block; height:100%;}
+  .p-card h3{font-family:'Fraunces',serif;font-weight:600;font-size:15.5px;margin:0 0 5px;color:var(--ink);}
+  .p-card p{font-size:12px;color:var(--muted);margin:0;line-height:1.45;}
+
+  /* STUDIO */
+  .studio{margin-top:56px;}
+  .studio-head{margin-bottom:18px;}
+  .ratio-block{background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:16px 18px;}
+  .ratio-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:11px;}
+  .ratio-top .rt-label{font-family:'Space Mono',monospace;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;}
+  .ratio-top .rt-readout{font-family:'Space Mono',monospace;font-size:11px;color:var(--live);}
+  .ratio-bar{display:flex; height:30px; border-radius:6px; overflow:hidden; margin-bottom:10px;}
+  .ratio-bar span{display:block; height:100%; transition:width .25s ease;}
+  .ratio-control{display:flex;align-items:center;gap:12px;font-family:'Space Mono',monospace;font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;}
+  .ratio-control input[type=range]{
+    -webkit-appearance:none; flex:1; height:3px; background:var(--line); border-radius:2px; outline:none;
+  }
+  .ratio-control input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none; width:18px; height:18px; border-radius:50%; background:var(--live);
+    cursor:pointer; border:3px solid var(--page-bg); box-shadow:0 0 0 1px var(--live);
+  }
+  .ratio-control input[type=range]::-moz-range-thumb{
+    width:18px; height:18px; border-radius:50%; background:var(--live); cursor:pointer; border:3px solid var(--page-bg);
+  }
+
+  .mockup-frame{
+    position:relative; height:500px; border-radius:10px; overflow:hidden;
+    border:1px solid var(--line);
+  }
+  @media (max-width:600px){.mockup-frame{height:560px;}}
+  .hero-band{
+    position:absolute; top:0; left:0; right:0; overflow:hidden; min-height:0;
+    background:var(--m-bg-dark); color:var(--m-text-light);
+    transition:height .4s cubic-bezier(.4,0,.2,1), background .3s;
+    display:flex; flex-direction:column;
+  }
+  .content-band{
+    position:absolute; bottom:0; left:0; right:0;
+    background:var(--m-bg-light); color:var(--m-text-dark);
+    transition:height .4s cubic-bezier(.4,0,.2,1), background .3s;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .m-nav{display:flex; align-items:center; justify-content:space-between; padding:22px 30px 0; font-family:'Space Mono',monospace; font-size:11px; letter-spacing:.08em; text-transform:uppercase; position:relative; z-index:3;}
+  .m-nav .mark{display:flex;align-items:center;gap:9px;font-weight:700;}
+  .m-nav .dot{width:9px;height:9px;border-radius:50%;background:var(--m-accent);}
+  .m-nav .links{display:flex;gap:22px;opacity:.75;}
+  @media (max-width:600px){.m-nav .links{display:none;}}
+  .hero-content{position:relative;z-index:3;padding:26px 30px; max-width:520px; flex:1; display:flex; flex-direction:column; justify-content:center;}
+  .hero-badge{
+    font-family:'Space Mono',monospace; font-size:10.5px; letter-spacing:.06em; text-transform:uppercase;
+    display:inline-flex; align-items:center; gap:7px; opacity:.85; margin-bottom:14px;
+  }
+  .hero-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--m-accent);}
+  .hero-content h2{font-family:'Fraunces',serif; font-weight:600; font-size:clamp(21px,3vw,30px); line-height:1.14; margin:0 0 12px;}
+  .hero-content p{font-size:13.5px; line-height:1.55; opacity:.88; margin:0 0 18px; max-width:420px;}
+  .m-cta{
+    display:inline-flex; align-items:center; gap:8px; width:fit-content;
+    background:var(--m-accent); color:var(--m-text-dark-fixed, #14251F);
+    font-family:'Inter',sans-serif; font-weight:600; font-size:12.5px;
+    padding:11px 18px; border-radius:5px; border:none; cursor:pointer;
+  }
+  .canopy-deco{position:absolute; inset:0; z-index:1; opacity:.9;}
+  .canopy-deco .layer{position:absolute; left:-10%; right:-10%; border-radius:50% 50% 0 0/ 100% 100% 0 0;}
+  .stat-strip{display:flex; gap:44px; padding:0 30px; flex-wrap:wrap; justify-content:center;}
+  .stat{text-align:center;}
+  .stat b{display:block; font-family:'Fraunces',serif; font-weight:600; font-size:26px; color:var(--m-primary);}
+  .stat span{font-family:'Space Mono',monospace; font-size:10px; letter-spacing:.06em; text-transform:uppercase; color:var(--m-text-dark); opacity:.65;}
+
+  /* DETAIL PANEL */
+  .detail{margin-top:20px; background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:26px 28px;}
+  .detail-top{display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:8px; margin-bottom:20px;}
+  .detail-top h3{font-family:'Fraunces',serif; font-weight:600; font-size:21px; margin:0;}
+  .detail-top .vibe{font-size:13px; color:var(--muted); max-width:440px; text-align:right;}
+  @media (max-width:640px){.detail-top .vibe{text-align:left;}}
+  .swatch-detail-grid{display:grid; grid-template-columns:repeat(5,1fr); gap:10px;}
+  @media (max-width:820px){.swatch-detail-grid{grid-template-columns:repeat(3,1fr);}}
+  @media (max-width:480px){.swatch-detail-grid{grid-template-columns:repeat(2,1fr);}}
+  .sd-card{border:1px solid var(--line); border-radius:7px; overflow:hidden;}
+  .sd-swatch{height:64px; position:relative;}
+  .sd-pct{position:absolute; bottom:6px; right:8px; font-family:'Space Mono',monospace; font-size:11px; font-weight:700;}
+  .sd-body{padding:10px 11px; background:rgba(255,255,255,0.02);}
+  .sd-role{font-family:'Space Mono',monospace; font-size:9px; text-transform:uppercase; letter-spacing:.06em; color:var(--live); margin-bottom:4px;}
+  .sd-name{font-size:12.5px; font-weight:600; color:var(--ink); margin-bottom:2px;}
+  .sd-hex{font-family:'Space Mono',monospace; font-size:10.5px; color:var(--muted); margin-bottom:6px;}
+  .sd-desc{font-size:10.5px; font-style:italic; color:var(--muted); line-height:1.4;}
+  .sd-usage{font-size:10.5px; color:#c3ccc6; margin-top:5px; line-height:1.4;}
+
+  footer{margin-top:52px; font-size:12px; color:var(--muted); font-family:'Space Mono',monospace; letter-spacing:.02em;}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="eyebrow">Penabulu — Website Colour Direction</div>
+  <h1>Eight directions for a forest story people actually trust.</h1>
+  <p class="lede">Pick a direction below, then drag the slider to see how bold or how quiet it can feel. Every palette here is built to work for two audiences at once — <strong>the public reading the story, and the institutions funding it.</strong></p>
+
+  <section class="picker">
+    <div class="section-label">01 — Choose a direction</div>
+    <div class="palette-grid" id="paletteGrid"></div>
+  </section>
+
+  <section class="studio">
+    <div class="section-label">02 — Drag to test the mix</div>
+    <div class="studio-head">
+      <div class="ratio-block">
+        <div class="ratio-top">
+          <span class="rt-label">Composition ratio</span>
+          <span class="rt-readout" id="ratioReadout"></span>
+        </div>
+        <div class="ratio-bar" id="ratioBar"></div>
+        <div class="ratio-control">
+          <span>Airy</span>
+          <input type="range" id="ratioSlider" min="40" max="82" value="60">
+          <span>Bold</span>
+        </div>
+      </div>
+    </div>
+    <div class="mockup-frame" id="mockupFrame">
+      <div class="hero-band" id="heroBand">
+        <div class="canopy-deco" id="canopyDeco"></div>
+        <nav class="m-nav">
+          <div class="mark"><span class="dot"></span>PENABULU</div>
+          <div class="links"><span>Our Work</span><span>Stories</span><span>Report</span><span>Contact</span></div>
+        </nav>
+        <div class="hero-content">
+          <div class="hero-badge"><span class="dot"></span>7 Provinces · Forest Protection</div>
+          <h2>Protecting Indonesia's forests, province by province.</h2>
+          <p>Tracking real outcomes across Sumatra, Kalimantan, Java, and Papua — transparently, for everyone.</p>
+          <button class="m-cta">Explore the Impact →</button>
+        </div>
+      </div>
+      <div class="content-band" id="contentBand">
+        <div class="stat-strip">
+          <div class="stat"><b>7</b><span>Provinces</span></div>
+          <div class="stat"><b>10K+</b><span>Hectares</span></div>
+          <div class="stat"><b>100+</b><span>Communities</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="detail" id="detailPanel"></section>
+
+  <footer>Direction to be paired with real field photography before final sign-off.</footer>
+
+</div>
+
+<script>
+const PALETTES = [
+  {
+    id:'deep-canopy', name:'Deep Canopy',
+    vibe:'Composed and credible — the tone of an organisation with nothing to hide.',
+    ratio:62,
+    swatches:{
+      bgLight:{hex:'#F2F6F1', name:'Sage White', desc:'Morning light through leaves', role:'Background', pct:42},
+      bgDark:{hex:'#0B231C', name:'Ink Green', desc:'Forest floor at dusk', role:'Hero & deep sections', pct:18},
+      primary:{hex:'#123C30', name:'Canopy Green', desc:'Deep shade, always present', role:'Nav, headings, footer', pct:24},
+      secondary:{hex:'#1F6E82', name:'Sky Teal', desc:'Where canopy opens to sky', role:'Supporting sections', pct:11},
+      accent:{hex:'#4FD1C5', name:'Clearwater Aqua', desc:'A flash of clear water', role:'Buttons & highlights', pct:5},
+    }
+  },
+  {
+    id:'solar-canopy', name:'Solar Canopy',
+    vibe:'Same quiet confidence, plus one warm signal reserved for the wins worth celebrating.',
+    ratio:60,
+    swatches:{
+      bgLight:{hex:'#F5F5EF', name:'Warm White', desc:'Sun through the canopy gap', role:'Background', pct:44},
+      bgDark:{hex:'#0D2C24', name:'Deep Forest', desc:'Shade at midday', role:'Hero & deep sections', pct:16},
+      primary:{hex:'#14493B', name:'Forest Green', desc:'The steady, everyday tone', role:'Nav, headings, footer', pct:22},
+      secondary:{hex:'#1D6E96', name:'Sky Blue', desc:'Clear air above the trees', role:'Supporting sections', pct:12},
+      accent:{hex:'#C98A2C', name:'Kunyit Gold', desc:'Earned, not given', role:'Results & CTA only', pct:6},
+    }
+  },
+  {
+    id:'haze-recovery', name:'Haze & Recovery',
+    vibe:'Cinematic, a little dangerous — built for stories that carry real stakes.',
+    ratio:78,
+    swatches:{
+      bgLight:{hex:'#EDEFEA', name:'Stone', desc:'Ash-grey daylight', role:'Background', pct:28},
+      bgDark:{hex:'#071A1C', name:'Near-Black Teal', desc:'Before first light', role:'Hero & deep sections', pct:20},
+      primary:{hex:'#0B2E33', name:'Blackwater Teal', desc:'Peat water, deep and still', role:'Nav, headings, footer', pct:26},
+      secondary:{hex:'#6B6E68', name:'Smoke Grey', desc:'Haze before it clears', role:'Crisis / tension moments', pct:18},
+      accent:{hex:'#5FA8A0', name:'Muted Jade', desc:'The green that returns', role:'Recovery / hope moments', pct:8},
+    }
+  },
+  {
+    id:'riverine', name:'Riverine',
+    vibe:'Water-led and clear-headed. Good for maps, good for momentum.',
+    ratio:58,
+    swatches:{
+      bgLight:{hex:'#F3F7F6', name:'Water White', desc:'Shallows over sand', role:'Background', pct:40},
+      bgDark:{hex:'#0F2C3B', name:'Deep River', desc:'Where the current runs', role:'Hero & deep sections', pct:14},
+      primary:{hex:'#1B4F72', name:'River Blue', desc:'The main channel', role:'Nav, headings, footer', pct:26},
+      secondary:{hex:'#4A7C59', name:'Moss Green', desc:'The bank, not the water', role:'Supporting sections', pct:14},
+      accent:{hex:'#7FCDCD', name:'Pale Aqua', desc:'Light on moving water', role:'Buttons & highlights', pct:6},
+    }
+  },
+  {
+    id:'batik-indigo', name:'Batik Indigo',
+    vibe:'A distinctly Indonesian signature, not a borrowed one.',
+    ratio:64,
+    swatches:{
+      bgLight:{hex:'#ECEADF', name:'Kain Ivory', desc:'Undyed cloth', role:'Background', pct:38},
+      bgDark:{hex:'#1B2436', name:'Deep Indigo', desc:'Tarum at full strength', role:'Hero & deep sections', pct:16},
+      primary:{hex:'#22345E', name:'Tarum Indigo', desc:'The blue of hand-dyed cloth', role:'Nav, headings, footer', pct:28},
+      secondary:{hex:'#3D6B4F', name:'Leaf Green', desc:'The dye plant itself', role:'Supporting sections', pct:12},
+      accent:{hex:'#8FA998', name:'Soft Sage', desc:'A gentler counterpoint', role:'Buttons & highlights', pct:6},
+    }
+  },
+  {
+    id:'fern-light', name:'Fern Light',
+    vibe:"Fresh and unguarded — the version of green that hasn't gone dark yet.",
+    ratio:50,
+    swatches:{
+      bgLight:{hex:'#F5FAF3', name:'Morning Mist', desc:'First light on new leaves', role:'Background', pct:50},
+      bgDark:{hex:'#2C5C35', name:'Deep Fern', desc:'Shade, but never heavy', role:'Hero & deep sections', pct:12},
+      primary:{hex:'#3D8449', name:'Fern Green', desc:'Bright, alive, unmistakably green', role:'Nav, headings, footer', pct:22},
+      secondary:{hex:'#5FA8C4', name:'Clear Sky', desc:'A pale afternoon blue', role:'Supporting sections', pct:11},
+      accent:{hex:'#B4D66C', name:'Citrus Lime', desc:'A fresh, unexpected pop', role:'Buttons & highlights', pct:5},
+    }
+  },
+  {
+    id:'amber-grove', name:'Amber Grove',
+    vibe:'Warm and grounded — for the human, economic side of the story.',
+    ratio:56,
+    swatches:{
+      bgLight:{hex:'#F4F3EC', name:'Grain White', desc:'Dried leaves, first sun', role:'Background', pct:42},
+      bgDark:{hex:'#232B1C', name:'Deep Olive', desc:'Undergrowth shade', role:'Hero & deep sections', pct:14},
+      primary:{hex:'#4B5D3A', name:'Olive Grove', desc:'Working land, not wild land', role:'Nav, headings, footer', pct:24},
+      secondary:{hex:'#2E6171', name:'Mangrove Teal', desc:'Roots in brackish water', role:'Supporting sections', pct:14},
+      accent:{hex:'#8FA24D', name:'Warm Lime', desc:'A ripening note', role:'Buttons & highlights', pct:6},
+    }
+  },
+  {
+    id:'graphite-signal', name:'Graphite Signal',
+    vibe:'Bold and unmistakably modern — built for a night shot, not a boardroom.',
+    ratio:76,
+    swatches:{
+      bgLight:{hex:'#F7F8F7', name:'Paper White', desc:'Where the data gets quiet', role:'Background', pct:24},
+      bgDark:{hex:'#17191A', name:'Night Graphite', desc:"Camera-trap dark, not corporate dark", role:'Hero & deep sections', pct:34},
+      primary:{hex:'#17191A', name:'Night Graphite', desc:'The forest after sundown', role:'Nav, headings, footer', pct:24},
+      secondary:{hex:'#454B4D', name:'Slate Grey', desc:'Fog before it lifts', role:'Supporting sections', pct:12},
+      accent:{hex:'#21E6A8', name:'Signal Mint', desc:'One clear, modern pulse', role:'Buttons & highlights', pct:6},
+    }
+  },
+];
+
+let currentId = 'solar-canopy';
+let currentRatio = null; // colour-share (primary+secondary+accent), 0-100; null = use palette default
+
+const ROLE_ORDER = ['bgLight','bgDark','primary','secondary','accent'];
+const ROLE_LABELS = {bgLight:'Background', bgDark:'Dark Background', primary:'Primary', secondary:'Secondary', accent:'Accent'};
+
+// Given a palette and a colour-share value (0-100 = share held by primary+secondary+accent
+// combined, the rest going to background), compute live percentages for all 5 roles while
+// preserving each palette's original internal balance (e.g. how bgLight splits vs bgDark,
+// and how primary/secondary/accent split among themselves).
+function getLiveComposition(p, colourShare){
+  const s = p.swatches;
+  const bgBase = s.bgLight.pct + s.bgDark.pct;
+  const colourBase = s.primary.pct + s.secondary.pct + s.accent.pct;
+  const bgShare = 100 - colourShare;
+  const live = {};
+  live.bgLight = bgBase > 0 ? bgShare * (s.bgLight.pct / bgBase) : bgShare/2;
+  live.bgDark  = bgBase > 0 ? bgShare * (s.bgDark.pct  / bgBase) : bgShare/2;
+  live.primary   = colourBase > 0 ? colourShare * (s.primary.pct   / colourBase) : colourShare/3;
+  live.secondary = colourBase > 0 ? colourShare * (s.secondary.pct / colourBase) : colourShare/3;
+  live.accent     = colourBase > 0 ? colourShare * (s.accent.pct     / colourBase) : colourShare/3;
+  return live;
+}
+
+function hexToRgb(hex){
+  const h = hex.replace('#','');
+  const r = parseInt(h.substring(0,2),16);
+  const g = parseInt(h.substring(2,4),16);
+  const b = parseInt(h.substring(4,6),16);
+  return r+', '+g+', '+b;
+}
+
+function renderGrid(){
+  const grid = document.getElementById('paletteGrid');
+  grid.innerHTML = PALETTES.map(p => {
+    const s = p.swatches;
+    const strip = ROLE_ORDER.map(k => `<span style="width:${s[k].pct}%;background:${s[k].hex};"></span>`).join('');
+    return `<button class="p-card${p.id===currentId?' active':''}" data-id="${p.id}">
+      <div class="swatch-strip">${strip}</div>
+      <h3>${p.name}</h3>
+      <p>${p.vibe}</p>
+    </button>`;
+  }).join('');
+  grid.querySelectorAll('.p-card').forEach(card=>{
+    card.addEventListener('click', ()=> selectPalette(card.dataset.id, true));
+  });
+}
+
+function renderDetail(p, live){
+  const panel = document.getElementById('detailPanel');
+  panel.innerHTML = `
+    <div class="detail-top">
+      <h3>${p.name}</h3>
+      <div class="vibe">${p.vibe}</div>
+    </div>
+    <div class="swatch-detail-grid">
+      ${ROLE_ORDER.map(key=>{
+        const s = p.swatches[key];
+        const label = ROLE_LABELS[key];
+        const pct = Math.round(live[key]);
+        const textColor = (key==='bgLight'||key==='accent') ? '#14251F' : '#F2EFE6';
+        return `<div class="sd-card">
+          <div class="sd-swatch" style="background:${s.hex};">
+            <span class="sd-pct" style="color:${textColor};">${pct}%</span>
+          </div>
+          <div class="sd-body">
+            <div class="sd-role">${label}</div>
+            <div class="sd-name">${s.name}</div>
+            <div class="sd-hex">${s.hex} · rgb(${hexToRgb(s.hex)})</div>
+            <div class="sd-desc">"${s.desc}"</div>
+            <div class="sd-usage">${s.role}</div>
+          </div>
+        </div>`;
+      }).join('')}
+    </div>
+  `;
+}
+
+function renderRatioBar(p, live){
+  const bar = document.getElementById('ratioBar');
+  bar.innerHTML = ROLE_ORDER.map(key=>{
+    const s = p.swatches[key];
+    return `<span style="width:${live[key]}%;background:${s.hex};" title="${s.name} ${Math.round(live[key])}%"></span>`;
+  }).join('');
+  const readout = document.getElementById('ratioReadout');
+  readout.textContent = `${Math.round(live.bgLight+live.bgDark)}% background · ${Math.round(live.primary+live.secondary+live.accent)}% colour`;
+}
+
+function selectPalette(id, resetRatio){
+  currentId = id;
+  const p = PALETTES.find(x=>x.id===id);
+  const mockup = document.getElementById('mockupFrame');
+  const s = p.swatches;
+
+  mockup.style.setProperty('--m-bg-light', s.bgLight.hex);
+  mockup.style.setProperty('--m-bg-dark', s.bgDark.hex);
+  mockup.style.setProperty('--m-primary', s.primary.hex);
+  mockup.style.setProperty('--m-secondary', s.secondary.hex);
+  mockup.style.setProperty('--m-accent', s.accent.hex);
+  mockup.style.setProperty('--m-text-light', '#F5F5EF');
+  mockup.style.setProperty('--m-text-dark', '#182420');
+
+  document.documentElement.style.setProperty('--live', s.accent.hex);
+
+  // decorative layered canopy silhouette, recoloured per palette
+  const deco = document.getElementById('canopyDeco');
+  deco.innerHTML = `
+    <div class="layer" style="bottom:-40px;height:140px;background:${s.secondary.hex};opacity:.22;"></div>
+    <div class="layer" style="bottom:-60px;height:110px;left:8%;right:-20%;background:${s.primary.hex};opacity:.30;"></div>
+    <div class="layer" style="bottom:-70px;height:90px;left:-15%;right:15%;background:${s.accent.hex};opacity:.12;"></div>
+  `;
+
+  if(resetRatio){
+    currentRatio = p.ratio;
+    document.getElementById('ratioSlider').value = p.ratio;
+  }
+
+  renderGrid();
+  applyRatio(currentRatio);
+}
+
+function applyRatio(colourShare){
+  currentRatio = colourShare;
+  const p = PALETTES.find(x=>x.id===currentId);
+  const live = getLiveComposition(p, Number(colourShare));
+
+  const heroBand = document.getElementById('heroBand');
+  const contentBand = document.getElementById('contentBand');
+  const contentPct = live.bgLight; // the light "on-page" band is exactly the live bgLight share
+  heroBand.style.height = (100 - contentPct) + '%';
+  contentBand.style.height = contentPct + '%';
+
+  renderRatioBar(p, live);
+  renderDetail(p, live);
+}
+
+document.getElementById('ratioSlider').addEventListener('input', (e)=>{
+  applyRatio(e.target.value);
+});
+
+renderGrid();
+selectPalette(currentId, true);
+</script>
+</body>
+</html>
